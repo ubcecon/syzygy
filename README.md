@@ -5,7 +5,7 @@ Support for the VSE Syzygy instance.
 
 Command      | Description
 -------------|------------
-./update-toml.sh   | Pull latest TOML from `quantecon/lecture-source-jl`
+`./update-toml.sh`   | Pull latest TOML from `quantecon/lecture-source-jl`
 
 ## Troubleshooting 
 
