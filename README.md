@@ -1,7 +1,7 @@
 # syzygy
 Support for the VSE Syzygy instance. 
 
-## How to use this repo. 
+## Usage
 
 Command      | Description
 -------------|------------
