@@ -126,7 +126,7 @@ RUN JULIA_DEPOT_PATH=/opt/julia-1.0/local/share/julia julia /tmp/package-install
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
 #  && mv /opt/julia/local/share/julia/environments /opt/julia/ \
   && mv /tmp/environments /opt/julia/ \
-  && chmod -R 777 /opt/julia \
+  && chmod -R go+rx /opt/julia \
   && chmod -R go+rx $CONDA_DIR/share/jupyter \
   && rm -rf $HOME/.local \ 
   && rm -rf /opt/julia-1.0.0/local/share/julia/registries
