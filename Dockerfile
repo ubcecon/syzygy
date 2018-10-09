@@ -101,40 +101,51 @@ RUN mkdir -p /opt/flint2 \
   && make && make install \
   &&  rm -rf /opt/flint2
 
-# Julia
+# **** JULIA-SPECIFIC ****
+# Create the following directory in /opt (canonical software receptacle for Linux)
 RUN mkdir -p /opt/julia-1.0.0 \
+  # Download and unpack Julia binaries. 
   && curl -s -L https://julialang-s3.julialang.org/bin/linux/x64/1.0/julia-1.0.0-linux-x86_64.tar.gz | \
      tar -C /opt/julia-1.0.0 -x -z --strip-components=1 -f - \
+  # Make 'julia-1.0' point to julia-1.0.0
   && ln -fs /opt/julia-1.0.0 /opt/julia-1.0 \
+  # Make 'julia' point to julia-1.0.0
   && rm -rf /opt/julia && ln -fs /opt/julia-1.0.0 /opt/julia \
+  # Make '/usr/bin/julia' point to our 'julia', which is 'julia-1.0.0'
   && ln -fs /opt/julia/bin/julia /usr/bin/julia \
+  # Give ownership of that Julia install to 'jovyan', the "shared user."
   && chown -R jovyan /opt/julia-1.0.0
 
-# Install packages as NB_USER
-# Configure environment
+# Configure our shared environment. 
+# Switch over to 'jovyan'
 ENV NB_USER=jovyan
 ENV HOME=/home/$NB_USER
 USER $NB_USER
 
-RUN mkdir -p /tmp/environments/v1.0 && cd /tmp/environments/v1.0 \
-&& wget https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml \
-&& wget https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml
+# Set up our QuantEcon environment in the first depot entry for jovyan (~/jovyan/.julia). 
+RUN mkdir -p $HOME/.julia 
+# Instantiate everything we need. 
+RUN julia -e "using Pkg; pkg\"add Test\""
+RUN cd $HOME/.julia/environments/v1.0 \
+# Grab the online TOML. 
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
 
-ADD package-installs.jl /tmp/package-installs.jl
-RUN JULIA_DEPOT_PATH=/opt/julia-1.0/local/share/julia julia /tmp/package-installs.jl
+# Set up our environment. 
+RUN julia -e "using Pkg; pkg\"instantiate\""
 
+# Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
-#  && mv /opt/julia/local/share/julia/environments /opt/julia/ \
-  && mv /tmp/environments /opt/julia/ \
   && chmod -R go+rx /opt/julia \
   && chmod -R go+rx $CONDA_DIR/share/jupyter \
   && rm -rf $HOME/.local \ 
   && rm -rf /opt/julia-1.0.0/local/share/julia/registries
 
-ADD startup.jl /opt/julia/etc/julia
-
+# Set up our user. 
 USER jupyter
-# Configure environment
 ENV NB_USER=jupyter \
     NB_UID=9999
 ENV HOME=/home/$NB_USER
+RUN mkdir $HOME/.julia
+RUN julia -e "using Pkg; pkg\"add Test\""
+ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia-1.0.0"
