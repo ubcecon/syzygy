@@ -132,14 +132,19 @@ RUN cd $HOME/.julia/environments/v1.0 \
 && wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
 
 # Set up our environment. 
-RUN julia -e "using Pkg; pkg\"instantiate\""
+RUN julia -e "using Pkg; pkg\"instantiate\"; pkg\"precompile\""
 
 # Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
   && chmod -R go+rx /opt/julia \
   && chmod -R go+rx $CONDA_DIR/share/jupyter \
   && rm -rf $HOME/.local \ 
-  && rm -rf /opt/julia-1.0.0/local/share/julia/registries
+  && rm -rf /opt/julia-1.0.0/local/share/julia/registries \ 
+  && rm -rf $HOME/.julia/registries
+
+USER root 
+RUN chown -R jupyter $HOME/.julia
+
 
 # Set up our user. 
 USER jupyter
@@ -148,4 +153,7 @@ ENV NB_USER=jupyter \
 ENV HOME=/home/$NB_USER
 RUN mkdir $HOME/.julia
 RUN julia -e "using Pkg; pkg\"add Test\""
-ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia-1.0.0"
+ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
+RUN cd $HOME/.julia/environments/v1.0 \
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml

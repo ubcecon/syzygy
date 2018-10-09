@@ -15,3 +15,6 @@ Command      | Description
 
 Try `chmod +x foo.sh`, which will add execute permissions. May need to `sudo chmod +x`. 
 
+> Bind for 0.0.0.0:8888 failed: port is already allocated.
+
+Try restarting docker. 
