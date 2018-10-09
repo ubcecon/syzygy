@@ -1,6 +1,6 @@
 FROM callysto/pims-minimal
 
-MAINTAINER Ian Allison <iana@pims.math.ca>
+LABEL maintainer "Ian Allison <iana@pims.math.ca>"
 
 USER root
 
