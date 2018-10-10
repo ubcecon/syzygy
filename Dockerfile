@@ -123,16 +123,15 @@ ENV HOME=/home/$NB_USER
 USER $NB_USER
 
 # Set up our QuantEcon environment in the first depot entry for jovyan (~/jovyan/.julia). 
-RUN mkdir -p $HOME/.julia 
+RUN mkdir -p $HOME/.julia/environments/v1.0 
 # Instantiate everything we need. 
-RUN julia -e "using Pkg; pkg\"add Test\""
 RUN cd $HOME/.julia/environments/v1.0 \
 # Grab the online TOML. 
 && wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
 && wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
 
 # Set up our environment. 
-RUN julia -e "using Pkg; pkg\"instantiate\"; pkg\"precompile\""
+RUN julia -e "using Pkg; pkg\"build\"; pkg\"instantiate\"; pkg\"precompile\""
 
 # Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
@@ -156,4 +155,9 @@ ENV NB_USER=jupyter \
 ENV HOME=/home/$NB_USER
 # Starts entirely blank. 
 RUN mkdir $HOME/.julia
+RUN mkdir -p $HOME/.julia/environments/v1.0
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
+RUN cd $HOME/.julia/environments/v1.0 \
+# Grab the online TOML. 
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
+&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
