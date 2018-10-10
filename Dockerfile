@@ -152,6 +152,7 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && rm -rf $HOME/.julia/environments 
 
 RUN chown -R jupyter /home/jupyter/.julia/
+RUN chmod -R go+rx /home/jovyan/.julia
 
 # Set up our user. 
 USER jupyter
