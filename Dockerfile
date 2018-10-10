@@ -151,7 +151,9 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   # Nuke the jovyan environment. 
   && rm -rf $HOME/.julia/environments 
 
+# Give the user full control over the /jupyter/.julia directory. 
 RUN chown -R jupyter /home/jupyter/.julia/
+# Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
 
 # Set up our user. 
@@ -159,5 +161,4 @@ USER jupyter
 ENV NB_USER=jupyter \
     NB_UID=9999
 ENV HOME=/home/$NB_USER
-# Starts entirely blank. 
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
