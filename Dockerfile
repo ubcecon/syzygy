@@ -139,21 +139,21 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && chmod -R go+rx /opt/julia \
   && chmod -R go+rx $CONDA_DIR/share/jupyter \
   && rm -rf $HOME/.local \ 
+  # Nuke the registry that came with Julia. 
   && rm -rf /opt/julia-1.0.0/local/share/julia/registries \ 
-  && rm -rf $HOME/.julia/registries
+  # Nuke the registry that Jovyan uses. 
+  && rm -rf $HOME/.julia/registries \ 
+  # Nuke the environments that we instantiate for Jovyan. 
+  && rm -rf $HOME/.julia/environments/ 
 
 USER root 
 RUN chown -R jupyter $HOME/.julia
-
 
 # Set up our user. 
 USER jupyter
 ENV NB_USER=jupyter \
     NB_UID=9999
 ENV HOME=/home/$NB_USER
+# Starts entirely blank. 
 RUN mkdir $HOME/.julia
-RUN julia -e "using Pkg; pkg\"add Test\""
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
-RUN cd $HOME/.julia/environments/v1.0 \
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
