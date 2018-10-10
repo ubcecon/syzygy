@@ -133,6 +133,9 @@ RUN cd $HOME/.julia/environments/v1.0 \
 # Set up our environment. 
 RUN julia -e "using Pkg; pkg\"build\"; pkg\"instantiate\"; pkg\"precompile\""
 
+# For mkdir stuff. 
+USER root 
+
 # Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
   && chmod -R go+rx /opt/julia \
@@ -142,11 +145,13 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && rm -rf /opt/julia-1.0.0/local/share/julia/registries \ 
   # Nuke the registry that Jovyan uses. 
   && rm -rf $HOME/.julia/registries \ 
-  # Nuke the environments that we instantiate for Jovyan. 
-  && rm -rf $HOME/.julia/environments/ 
+  && mkdir -p /home/jupyter/.julia/ \ 
+  # Copy over the environments. 
+  && cp -r $HOME/.julia/environments /home/jupyter/.julia/ \
+  # Nuke the jovyan environment. 
+  && rm -rf $HOME/.julia/environments 
 
-USER root 
-RUN chown -R jupyter $HOME/.julia
+RUN chown -R jupyter /home/jupyter/.julia/
 
 # Set up our user. 
 USER jupyter
@@ -154,10 +159,4 @@ ENV NB_USER=jupyter \
     NB_UID=9999
 ENV HOME=/home/$NB_USER
 # Starts entirely blank. 
-RUN mkdir $HOME/.julia
-RUN mkdir -p $HOME/.julia/environments/v1.0
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
-RUN cd $HOME/.julia/environments/v1.0 \
-# Grab the online TOML. 
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
