@@ -144,17 +144,15 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   # Nuke the registry that came with Julia. 
   && rm -rf /opt/julia-1.0.0/local/share/julia/registries \ 
   # Nuke the registry that Jovyan uses. 
-  && rm -rf $HOME/.julia/registries \ 
-  && mkdir -p /home/jupyter/.julia/ \ 
-  # Copy over the environments. 
-  && cp -r $HOME/.julia/environments /home/jupyter/.julia/ \
-  # Nuke the jovyan environment. 
-  && rm -rf $HOME/.julia/environments 
+  && rm -rf $HOME/.julia/registries 
+  
+# Create the init script. 
+ADD init.sh $HOME/init.sh
 
-# Give the user full control over the /jupyter/.julia directory. 
-RUN chown -R jupyter /home/jupyter/.julia/
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
+# Give the user read and execute permissions over the init script. 
+RUN chmod go+rx /home/jovyan/init.sh
 
 # Set up our user. 
 USER jupyter
@@ -162,3 +160,5 @@ ENV NB_USER=jupyter \
     NB_UID=9999
 ENV HOME=/home/$NB_USER
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
+# Run the init script. 
+RUN /home/jovyan/init.sh

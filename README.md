@@ -7,6 +7,7 @@ Command      | Description
 -------------|------------
 `docker build -t syzygy:latest .` | Build image from Dockerfile and call it `syzygy:latest`. 
 `docker run -it -p 8888:8888 -e JUPYTER_LAB_ENABLE=yes syzygy:latest` | Run Docker image.
+`docker run -i -t syzygy:latest /bin/bash` | Run as container. 
 `./pull-toml.sh`   | Download latest TOML from `quantecon/lecture-source-jl`.
 `./buildrun.sh` | Do (1) and (2). 
 
