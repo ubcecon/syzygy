@@ -126,15 +126,14 @@ USER $NB_USER
 RUN julia -e "using Pkg; pkg\"add IJulia Compat Revise Plots GR Parameters Expectations Distributions DifferentialEquations DiffEqCallbacks\"; pkg\"build\";  pkg\"precompile\""
 # Add the InstantiateFromURL package 
 RUN julia -e "using Pkg; pkg\"add https://github.com/QuantEcon/InstantiateFromURL.jl\"; pkg\"precompile\""
+# For mkdir stuff. 
+USER root 
 # Grab the v0.1.0 of the QuantEconLecturePackages
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.1.0\")"
 # Grab the v0.2.0 of the QuantEconLecturePackages
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.2.0\")"
 # Grab the master of that. 
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
-
-# For mkdir stuff. 
-USER root 
 
 # Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
