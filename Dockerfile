@@ -103,18 +103,18 @@ RUN mkdir -p /opt/flint2 \
 
 # **** JULIA-SPECIFIC ****
 # Create the following directory in /opt (canonical software receptacle for Linux)
-RUN mkdir -p /opt/julia-1.0.0 \
+RUN mkdir -p /opt/julia-1.0.1 \
   # Download and unpack Julia binaries. 
-  && curl -s -L https://julialang-s3.julialang.org/bin/linux/x64/1.0/julia-1.0.0-linux-x86_64.tar.gz | \
-     tar -C /opt/julia-1.0.0 -x -z --strip-components=1 -f - \
-  # Make 'julia-1.0' point to julia-1.0.0
-  && ln -fs /opt/julia-1.0.0 /opt/julia-1.0 \
-  # Make 'julia' point to julia-1.0.0
-  && rm -rf /opt/julia && ln -fs /opt/julia-1.0.0 /opt/julia \
-  # Make '/usr/bin/julia' point to our 'julia', which is 'julia-1.0.0'
+  && curl -s -L https://julialang-s3.julialang.org/bin/linux/x64/1.0/julia-1.0.1-linux-x86_64.tar.gz | \
+     tar -C /opt/julia-1.0.1 -x -z --strip-components=1 -f - \
+  # Make 'julia-1.0' point to julia-1.0.1
+  && ln -fs /opt/julia-1.0.1 /opt/julia-1.0 \
+  # Make 'julia' point to julia-1.0.1
+  && rm -rf /opt/julia && ln -fs /opt/julia-1.0.1 /opt/julia \
+  # Make '/usr/bin/julia' point to our 'julia', which is 'julia-1.0.1'
   && ln -fs /opt/julia/bin/julia /usr/bin/julia \
   # Give ownership of that Julia install to 'jovyan', the "shared user."
-  && chown -R jovyan /opt/julia-1.0.0
+  && chown -R jovyan /opt/julia-1.0.1
 
 # Configure our shared environment. 
 # Switch over to 'jovyan'
@@ -141,7 +141,7 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && chmod -R go+rx $CONDA_DIR/share/jupyter \
   && rm -rf $HOME/.local \ 
   # Nuke the registry that came with Julia. 
-  && rm -rf /opt/julia-1.0.0/local/share/julia/registries \ 
+  && rm -rf /opt/julia-1.0.1/local/share/julia/registries \ 
   # Nuke the registry that Jovyan uses. 
   && rm -rf $HOME/.julia/registries 
   
