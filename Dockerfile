@@ -123,15 +123,15 @@ ENV HOME=/home/$NB_USER
 USER $NB_USER
 
 # Set up our QuantEcon environment in the first depot entry for jovyan (~/jovyan/.julia). 
-RUN mkdir -p $HOME/.julia/environments/v1.0 
-# Instantiate everything we need. 
-RUN cd $HOME/.julia/environments/v1.0 \
-# Grab the online TOML. 
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Manifest.toml -O Manifest.toml \
-&& wget -q https://raw.githubusercontent.com/QuantEcon/lecture-source-jl/master/notebooks/Project.toml -O Project.toml
-
-# Set up our environment. 
-RUN julia -e "using Pkg; pkg\"build\"; pkg\"instantiate\"; pkg\"precompile\""
+RUN julia -e "using Pkg; pkg\"add IJulia Compat Revise Plots GR Parameters Expectations Distributions DifferentialEquations DiffEqCallbacks\"; pkg\"build\";  pkg\"precompile\""
+# Add the InstantiateFromURL package 
+RUN julia -e "using Pkg; pkg\"add https://github.com/QuantEcon/InstantiateFromURL.jl\"; pkg\"precompile\""
+# Grab the v0.1.0 of the QuantEconLecturePackages
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.1.0\")"
+# Grab the v0.2.0 of the QuantEconLecturePackages
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.2.0\")"
+# Grab the master of that. 
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
 
 # For mkdir stuff. 
 USER root 
@@ -161,4 +161,4 @@ ENV NB_USER=jupyter \
 ENV HOME=/home/$NB_USER
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
 # Run the init script. 
-RUN /home/jovyan/init.sh
+RUN /home/jovyan/init.sh 
