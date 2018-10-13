@@ -20,3 +20,7 @@ Try `chmod +x foo.sh`, which will add execute permissions. May need to `sudo chm
 > Bind for 0.0.0.0:8888 failed: port is already allocated.
 
 Try restarting docker. 
+
+> macOS command line utilities behave differently than the Linux. 
+
+This is because macOS comes with the FreeBSD version of these utilities, whereas Linux comes with GNU. If this breaks something, try [using the GNU core utilities](https://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities).
