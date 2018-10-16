@@ -24,3 +24,7 @@ Try restarting docker.
 > macOS command line utilities behave differently than the Linux. 
 
 This is because macOS comes with the FreeBSD version of these utilities, whereas Linux comes with GNU. If this breaks something, try [using the GNU core utilities](https://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities).
+
+> Invalid instruction...
+
+Try a different computer. (This looks like some `OpenBLAS` issue, but I'm not sure how to fix it. A good approach might be building the library on your machine from source.)
