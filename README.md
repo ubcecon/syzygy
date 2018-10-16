@@ -24,3 +24,7 @@ Try restarting docker.
 > macOS command line utilities behave differently than the Linux. 
 
 This is because macOS comes with the FreeBSD version of these utilities, whereas Linux comes with GNU. If this breaks something, try [using the GNU core utilities](https://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities).
+
+> Lots of red while building Dockerfile. 
+
+Compat.jl doesn't support precompilation, which is why things that depend on it might not be able to precompile. This is expected behavior and doesn't break anything.
