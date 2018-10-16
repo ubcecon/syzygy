@@ -129,9 +129,11 @@ RUN julia -e "using Pkg; pkg\"add https://github.com/QuantEcon/InstantiateFromUR
 # For mkdir stuff. 
 USER root 
 # Grab the v0.1.0 of the QuantEconLecturePackages
-RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.1.0\")"
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.1.0\")"
 # Grab the v0.2.0 of the QuantEconLecturePackages
-RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", version = \"v0.2.0\")"
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.2.0\")"
+# Grab the v0.3.0 of that (plots and compat)
+RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.3.0\")"
 # Grab the master of that. 
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
 
@@ -152,6 +154,8 @@ ADD init.sh $HOME/init.sh
 RUN chmod -R go+rx /home/jovyan/.julia
 # Give the user read and execute permissions over the init script. 
 RUN chmod go+rx /home/jovyan/init.sh
+# Give the user full control over their projects directory
+RUN chown -R jupyter /home/jupyter/.projects
 
 # Set up our user. 
 USER jupyter
