@@ -5,7 +5,7 @@ Support for the VSE Syzygy instance.
 
 Command      | Description
 -------------|------------
-`docker build -t syzygy:latest .` | Build image from Dockerfile and call it `syzygy:latest`. 
+`docker build -t syzygy:latest .` | Build image from Dockerfile and call it `syzygy:latest`. (Use the `docker build --no-cache` form for a clean build.)
 `docker run -it -p 8888:8888 -e JUPYTER_LAB_ENABLE=yes syzygy:latest` | Run Docker image.
 `docker run -i -t syzygy:latest /bin/bash` | Run as terminal. 
 `./pull-toml.sh`   | Download latest TOML from `quantecon/lecture-source-jl`.
