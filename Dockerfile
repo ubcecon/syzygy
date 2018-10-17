@@ -144,7 +144,7 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && rm -rf /opt/julia-1.0.1/local/share/julia/registries \ 
   # Nuke the registry that Jovyan uses. 
   && rm -rf $HOME/.julia/registries 
-  
+
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
 # Give the user full control over their projects directory
@@ -161,3 +161,4 @@ USER root
 RUN mkdir $HOME/.julia \
   && cp -r /home/jovyan/.julia/environments $HOME/.julia/
 RUN chown -R jupyter $HOME/.julia
+USER jupyter 
