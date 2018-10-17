@@ -153,7 +153,7 @@ RUN chmod -R go+rx /home/jovyan/.julia
 # Give the user full control over their projects directory
 RUN chown -R jupyter /home/jupyter/.projects
 # Same for .julia 
-RUN chown -R jupyter /home/jupyter/.projects
+RUN chown -R jupyter /home/jupyter/.julia
 
 # Set up our user. 
 USER jupyter
