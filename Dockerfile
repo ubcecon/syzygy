@@ -162,4 +162,4 @@ ENV NB_USER=jupyter \
 ENV HOME=/home/$NB_USER
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
 # Run the init script. 
-RUN /home/jovyan/init.sh 
+RUN bash -c /home/jovyan/init.sh 
