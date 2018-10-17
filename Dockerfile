@@ -146,7 +146,7 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   && rm -rf $HOME/.julia/registries \ 
   # Pre-seed 
   && mkdir /home/jupyter/.julia \ 
-  && cp -r $HOME/.julia/environments /home/jupyter/.julia
+  && mv -v $HOME/.julia/environments /home/jupyter/.julia
 
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
