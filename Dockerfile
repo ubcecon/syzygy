@@ -162,4 +162,7 @@ ENV NB_USER=jupyter \
 ENV HOME=/home/$NB_USER
 ENV JULIA_DEPOT_PATH="/home/jupyter/.julia:/home/jovyan/.julia:/opt/julia"
 # Pre-seed
-RUN mkdir -p $HOME/.julia && cp -r /home/jovyan/.julia/environments $HOME/.julia/
+USER root 
+RUN mkdir $HOME/.julia \
+  && cp -r /home/jovyan/.julia/environments $HOME/.julia/
+RUN chown -R jupyter $HOME/.julia
