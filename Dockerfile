@@ -124,8 +124,8 @@ USER $NB_USER
 
 # Set up our QuantEcon environment in the first depot entry for jovyan (~/jovyan/.julia). 
 RUN julia -e "using Pkg; pkg\"add IJulia InstantiateFromURL Compat Revise Plots GR Parameters Expectations Distributions DifferentialEquations DiffEqCallbacks\"; pkg\"build\";  pkg\"precompile\""
-# For mkdir stuff. 
-USER root 
+# For mkdirs. 
+USER root
 # Grab the v0.1.0 of the QuantEconLecturePackages
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.1.0\")"
 # Grab the v0.2.0 of the QuantEconLecturePackages
@@ -134,6 +134,8 @@ RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/Q
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.3.0\")"
 # Grab the master of that. 
 RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
+# Pre-seeding. 
+RUN chown -R jupyter /home/jupyter/
 
 # Conda stuff. 
 RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/kernels/ \
@@ -143,17 +145,13 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   # Nuke the registry that came with Julia. 
   && rm -rf /opt/julia-1.0.1/local/share/julia/registries \ 
   # Nuke the registry that Jovyan uses. 
-  && rm -rf $HOME/.julia/registries \ 
-  # Pre-seed 
-  && mkdir /home/jupyter/.julia \ 
-  && mv -v $HOME/.julia/environments /home/jupyter/.julia
+  && rm -rf $HOME/.julia/registries  
 
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
-# Give the user full control over their projects directory
-RUN chown -R jupyter /home/jupyter/.projects
-# Same for .julia 
-RUN chown -R jupyter /home/jupyter/.julia
+
+# Add a startup.jl to copy 
+ADD startup.jl /opt/julia/etc/julia
 
 # Set up our user. 
 USER jupyter
