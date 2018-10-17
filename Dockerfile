@@ -145,9 +145,6 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
   # Nuke the registry that Jovyan uses. 
   && rm -rf $HOME/.julia/registries 
   
-# Create the init script. 
-ADD init.sh $HOME/init.sh
-
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
 # Give the user full control over their projects directory
