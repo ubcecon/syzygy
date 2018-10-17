@@ -150,8 +150,6 @@ ADD init.sh $HOME/init.sh
 
 # Give the user read and execute permissions over /jovyan/.julia. 
 RUN chmod -R go+rx /home/jovyan/.julia
-# Give the user read and execute permissions over the init script. 
-RUN chmod go+rx /home/jovyan/init.sh
 # Give the user full control over their projects directory
 RUN chown -R jupyter /home/jupyter/.projects
 
