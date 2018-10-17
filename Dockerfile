@@ -123,9 +123,7 @@ ENV HOME=/home/$NB_USER
 USER $NB_USER
 
 # Set up our QuantEcon environment in the first depot entry for jovyan (~/jovyan/.julia). 
-RUN julia -e "using Pkg; pkg\"add IJulia Compat Revise Plots GR Parameters Expectations Distributions DifferentialEquations DiffEqCallbacks\"; pkg\"build\";  pkg\"precompile\""
-# Add the InstantiateFromURL package 
-RUN julia -e "using Pkg; pkg\"add https://github.com/QuantEcon/InstantiateFromURL.jl\"; pkg\"precompile\""
+RUN julia -e "using Pkg; pkg\"add IJulia InstantiateFromURL Compat Revise Plots GR Parameters Expectations Distributions DifferentialEquations DiffEqCallbacks\"; pkg\"build\";  pkg\"precompile\""
 # For mkdir stuff. 
 USER root 
 # Grab the v0.1.0 of the QuantEconLecturePackages
@@ -151,9 +149,9 @@ RUN mv $HOME/.local/share/jupyter/kernels/julia-1.0 $CONDA_DIR/share/jupyter/ker
 ADD init.sh $HOME/init.sh
 
 # Give the user read and execute permissions over /jovyan/.julia. 
-RUN chmod -R ugo+rx /home/jovyan/.julia
+RUN chmod -R go+rx /home/jovyan/.julia
 # Give the user read and execute permissions over the init script. 
-RUN chmod ugo+rx /home/jovyan/init.sh
+RUN chmod go+rx /home/jovyan/init.sh
 # Give the user full control over their projects directory
 RUN chown -R jupyter /home/jupyter/.projects
 
