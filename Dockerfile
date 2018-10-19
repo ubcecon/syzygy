@@ -135,7 +135,7 @@ RUN julia -e "using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLec
 # Grab the v0.3.1 of that
 RUN julia -e "using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\", tag = \"v0.3.1\")"
 # Grab the master of that. 
-RUN julia -e "using Pkg; using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
+RUN julia -e "using InstantiateFromURL; activate_github(\"QuantEcon/QuantEconLecturePackages\")"
 # Pre-seeding. 
 RUN chown -R jupyter /home/jupyter/
 
